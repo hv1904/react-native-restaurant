@@ -111,7 +111,8 @@ const Tabs = () => {
                     borderTopWidth: 0,
                     backgroundColor: "transparent",
                     elevation: 0
-                }
+                },
+                
             }}
             tabBar={(props) => (
                 <CustomTabBar
@@ -138,7 +139,8 @@ const Tabs = () => {
                         <TabBarCustomButton
                             {...props}
                         />
-                    )
+                    ),
+                    headerShown: false
                 }}
             />
 
@@ -161,7 +163,8 @@ const Tabs = () => {
                         <TabBarCustomButton
                             {...props}
                         />
-                    )
+                    ),
+                    headerShown: false
                 }}
             />
 
@@ -184,7 +187,8 @@ const Tabs = () => {
                         <TabBarCustomButton
                             {...props}
                         />
-                    )
+                    ),
+                    headerShown: false
                 }}
             />
 
@@ -207,7 +211,8 @@ const Tabs = () => {
                         <TabBarCustomButton
                             {...props}
                         />
-                    )
+                    ),
+                    headerShown: false
                 }}
             />
         </Tab.Navigator>
