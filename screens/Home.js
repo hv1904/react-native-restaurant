@@ -134,7 +134,7 @@ const Home = ({ navigation }) => {
           priceRating: expensive,
           photo: images.pizza_restaurant,
           duration: "15 - 20 min",
-          location: {
+          location: { 
               latitude: 1.556306570595712,
               longitude: 110.35504616746915,
           },
