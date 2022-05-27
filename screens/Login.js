@@ -90,6 +90,7 @@ export default function Login() {
               borderBottomColor: "#fff",
               color: "#fff",
             }}
+            secureTextEntry={true}
           />
           {passErr && (
             <Text style={{ marginTop: 5, fontSize: 14, color: "red" }}>

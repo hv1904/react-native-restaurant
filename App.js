@@ -43,7 +43,15 @@ export default function App() {
            return {
              ...prevState,
              error: action.error
-           }
+           };
+        case 'SIGN_OUT':
+          return {
+            ...prevState,
+            isSignOut: true,
+            userToken: null,
+            user: {},
+            error: null,
+          };
         default:
           break;
       }
@@ -86,6 +94,13 @@ export default function App() {
         setLoading(false);
         dispatch({ type: "SET_ERR", error: "Login Failed" });
     }},
+    signOut: async () => {
+      try {
+        dispatch({type: 'SIGN_OUT'});
+      } catch (e) {
+        console.log(e);
+      }
+    },
     signInSuccess: async ({ token, user }) => {
       await AsyncStorage.setItem("user", JSON.stringify({ token, user }));
       dispatch({ type: "SIGN_IN_SUCCESS", token, user });
@@ -97,7 +112,6 @@ export default function App() {
     },
     signOut: async () => {
       try {
-        await AsyncStorage.removeItem("user");
         dispatch({ type: "SIGN_OUT" });
       } catch (e) {
         console.log(e);
