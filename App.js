@@ -5,9 +5,26 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthContext } from "./utils/auth_context";
 import { Restaurant } from "./screens";
+import * as _ from 'lodash';
 import Tabs from "./navigation/tabs";
 import Loading from "./screens/Loading";
 import Login from "./screens/Login";
+
+
+const userData = [
+  {
+    id: 1,
+    username: 'huevu',
+    password: '123456',
+    fullname: "Vu Thi Hue",
+  },
+  {
+    id: 2,
+    username: 'tsubasa',
+    password: '123456',
+    fullname: "tsubasa pham",
+  },
+]
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -22,6 +39,11 @@ export default function App() {
             userToken: action.token,
             user: action.user,
           };
+        case "SET_ERR":
+           return {
+             ...prevState,
+             error: action.error
+           }
         default:
           break;
       }
@@ -38,30 +60,32 @@ export default function App() {
       countries: [],
       expireCountry: "",
       loadingCountry: false,
+      error: null,
     }
   );
 
   const authContext = React.useMemo(() => ({
     signIn: async ({ username, password }) => {
-        console.log(username,password);
       setLoading(true);
-      let user = {
-        name: "user",
-      };
+      const userMap = await _.filter(userData, (e)=> {
+        if(e.username === username.toLowerCase().trim() && e.password === password.toLowerCase().trim()) return e
+      })
       try {
-        setTimeout(() => {
-          dispatch({ type: "SIGN_IN_SUCCESS",token: username, user });
-          setLoading(false);
-        }, 2000);
+        setTimeout( () => {
+          if(userMap.length > 0) {
+            setLoading(false);
+            dispatch({ type: "SIGN_IN_SUCCESS",token: username, user: userMap[0] });
+            dispatch({ type: "SET_ERR", error: '' });
+          }
+          else {
+            setLoading(false);
+            dispatch({ type: "SET_ERR", error: "Login Failed" });
+          }
+        }, 1000);
       } catch (error) {
-        showMessage({
-          message: "Login",
-          description: error.message.replace(regex, ""),
-          type: "danger",
-        });
-        dispatch({ type: "SIGN_IN_ERROR", error });
-      }
-    },
+        setLoading(false);
+        dispatch({ type: "SET_ERR", error: "Login Failed" });
+    }},
     signInSuccess: async ({ token, user }) => {
       await AsyncStorage.setItem("user", JSON.stringify({ token, user }));
       dispatch({ type: "SIGN_IN_SUCCESS", token, user });
@@ -80,8 +104,6 @@ export default function App() {
       }
     },
   }));
-
-  console.log(state.userToken)
 
   return (
     <View style={{flex:1}}>

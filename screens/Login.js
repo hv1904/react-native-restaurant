@@ -10,9 +10,31 @@ import { AuthContext } from "../utils/auth_context";
 import { COLORS, images } from "../constants";
 
 export default function Login() {
-  const { signIn } = React.useContext(AuthContext);
+  const { signIn, error } = React.useContext(AuthContext);
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [userErr, setUserErr] = React.useState(false);
+  const [passErr, setPasswordErr] = React.useState(false);
+
+  const onSignIn = async () => {
+    if (username === "") {
+      setUserErr(true);
+      return;
+    }
+    else {
+      setUserErr(false);
+    }
+    if (password === "") {
+      setPasswordErr(true);
+      return;
+    }
+    else {
+      setPasswordErr(false);
+    }
+    const res = await signIn({ username, password });
+    console.log(res);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
@@ -27,6 +49,11 @@ export default function Login() {
         <Text style={{ fontSize: 30, marginBottom: 20, color: "#fff" }}>
           Login
         </Text>
+        {error && error !== "" && (
+          <Text style={{ marginTop: 5, fontSize: 16, color: "red" }}>
+            {error}
+          </Text>
+        )}
         <View style={{ width: "100%", marginTop: 10 }}>
           <Text style={{ fontSize: 18, color: "#fff" }}>Username</Text>
           <TextInput
@@ -42,6 +69,11 @@ export default function Login() {
               color: "#fff",
             }}
           />
+          {userErr && (
+            <Text style={{ marginTop: 5, fontSize: 14, color: "red" }}>
+              Fill data
+            </Text>
+          )}
         </View>
         <View style={{ width: "100%", marginTop: 10 }}>
           <Text style={{ fontSize: 18, color: "#fff" }}>Password</Text>
@@ -59,6 +91,11 @@ export default function Login() {
               color: "#fff",
             }}
           />
+          {passErr && (
+            <Text style={{ marginTop: 5, fontSize: 14, color: "red" }}>
+              Fill data
+            </Text>
+          )}
         </View>
         <TouchableOpacity
           style={{
@@ -70,9 +107,7 @@ export default function Login() {
             alignItems: "center",
             borderRadius: 25,
           }}
-          onPress={() => {
-            signIn({ username, password });
-          }}
+          onPress={onSignIn}
         >
           <Text style={{ fontSize: 18, fontWeight: "bold" }}>Login</Text>
         </TouchableOpacity>
